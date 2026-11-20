@@ -1,0 +1,868 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --border: #e2e5ea;
+  --text: #16181d;
+  --text-dim: #6b7280;
+  --accent: #3b5bdb;
+  --accent-soft: #eef1ff;
+  --ok: #12805c;
+  --ok-soft: #e7f6f0;
+  --warn: #9a5b00;
+  --warn-soft: #fdf2e2;
+  --error: #b42318;
+  --error-soft: #fdecea;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 4px 12px rgba(16, 24, 40, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: 100%;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100%;
+  }
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.brand {
+  margin-bottom: 20px;
+}
+
+.brand h1 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.brand p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 12.5px;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.panel h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 13px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.status-row:last-child {
+  border-bottom: none;
+}
+
+.status-row .label {
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.status-row .value {
+  text-align: right;
+  word-break: break-all;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge.ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+.badge.warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.badge.error {
+  background: var(--error-soft);
+  color: var(--error);
+}
+
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.file-list li {
+  padding: 7px 0;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.file-list li:last-child {
+  border-bottom: none;
+}
+
+.file-list .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.btn {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 9px;
+  padding: 9px 12px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn.primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.hint {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+/* ---------- chat ---------- */
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: 0;
+}
+
+.transcript {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.empty {
+  margin: auto;
+  text-align: center;
+  color: var(--text-dim);
+  max-width: 460px;
+}
+
+.empty h3 {
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.empty ul {
+  text-align: left;
+  padding-left: 20px;
+  margin: 14px 0 0;
+}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+  animation: rise 0.18s ease-out;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.msg.user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.msg.assistant {
+  align-self: flex-start;
+}
+
+.bubble {
+  padding: 11px 15px;
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.msg.user .bubble {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.msg.assistant .bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-bottom-left-radius: 4px;
+}
+
+.meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin-top: 7px;
+}
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  /* Padding rather than margin: it sits inside the clipped box, so it collapses
+     away with the list instead of leaving a gap under the toggle. */
+  padding-top: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.source {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 11px;
+}
+
+.source-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.source-head .score {
+  color: var(--text-dim);
+  font-weight: 500;
+  margin-left: auto;
+}
+
+.source .snippet {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.composer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 16px 32px 20px;
+}
+
+.composer-inner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 13px;
+  font: inherit;
+  line-height: 1.5;
+  min-height: 46px;
+  max-height: 180px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.composer textarea:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.composer .send {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 20px;
+  height: 46px;
+  font-weight: 600;
+}
+
+.composer .send:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.footer-note {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* ---------- settings + upload forms ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.field {
+  margin-bottom: 10px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.field-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.link:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.form-error {
+  color: var(--error);
+  font-size: 12.5px;
+  margin: 8px 0 0;
+  word-break: break-word;
+}
+
+.form-ok {
+  color: var(--ok);
+  font-size: 12.5px;
+  margin: 8px 0 0;
+}
+
+.upload-result {
+  margin-top: 8px;
+}
+
+.upload-result p {
+  margin: 4px 0 0;
+}
+
+.error-banner {
+  background: var(--error-soft);
+  color: var(--error);
+  border: 1px solid #f5c6c2;
+  border-radius: 9px;
+  padding: 10px 13px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: -2px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- answer typography (Markdown) ---------- */
+
+.bubble.answer {
+  /* Markdown already encodes structure; pre-wrap would fight it. */
+  white-space: normal;
+  font-size: 14px;
+  line-height: 1.75;
+  max-width: 100%;
+}
+
+.bubble.answer > :first-child {
+  margin-top: 0;
+}
+
+.bubble.answer > :last-child {
+  margin-bottom: 0;
+}
+
+.bubble.answer p {
+  margin: 0 0 10px;
+}
+
+.bubble.answer h1,
+.bubble.answer h2,
+.bubble.answer h3,
+.bubble.answer h4,
+.bubble.answer h5,
+.bubble.answer h6 {
+  margin: 16px 0 8px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.bubble.answer h1 { font-size: 16px; }
+.bubble.answer h2 { font-size: 15px; }
+.bubble.answer h3,
+.bubble.answer h4,
+.bubble.answer h5,
+.bubble.answer h6 { font-size: 14px; }
+
+.bubble.answer strong {
+  font-weight: 700;
+}
+
+.bubble.answer em {
+  color: var(--text-dim);
+}
+
+/* Round bullets instead of the default disc — reads better for Chinese lists. */
+.bubble.answer ul {
+  list-style: none;
+  margin: 0 0 10px;
+  padding-left: 1.1em;
+}
+
+.bubble.answer ul > li {
+  position: relative;
+  padding-left: 0.9em;
+  margin: 5px 0;
+}
+
+.bubble.answer ul > li::before {
+  content: "";
+  position: absolute;
+  left: -0.9em;
+  top: 0.65em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.bubble.answer ol {
+  margin: 0 0 10px;
+  padding-left: 1.4em;
+}
+
+.bubble.answer ol > li {
+  margin: 5px 0;
+}
+
+.bubble.answer ol > li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.bubble.answer code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+}
+
+.bubble.answer pre {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  margin: 0 0 10px;
+}
+
+.bubble.answer pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.bubble.answer blockquote {
+  margin: 0 0 10px;
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--accent);
+  color: var(--text-dim);
+}
+
+.bubble.answer table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 12px;
+  font-size: 13px;
+  display: block;
+  overflow-x: auto;
+}
+
+.bubble.answer th,
+.bubble.answer td {
+  border: 1px solid var(--border);
+  padding: 6px 9px;
+  text-align: left;
+}
+
+.bubble.answer th {
+  background: var(--surface-2);
+  font-weight: 600;
+}
+
+.bubble.answer a {
+  color: var(--accent);
+}
+
+.bubble.answer hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 14px 0;
+}
+
+/* ---------- [1] citation badges ---------- */
+
+.cite {
+  display: inline-block;
+  min-width: 15px;
+  text-align: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(59, 91, 219, 0.28);
+  border-radius: 5px;
+  padding: 0 4px;
+  margin: 0 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  vertical-align: super;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.cite:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- meta pills ---------- */
+
+.meta-pill {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- source cards ---------- */
+
+.source-head {
+  gap: 8px;
+}
+
+.source-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.source-file {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.score-bar {
+  display: inline-block;
+  width: 48px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.score-fill {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+/* Highlight when its citation is clicked in the answer. */
+@keyframes cite-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 91, 219, 0.4);
+  }
+  30% {
+    box-shadow: 0 0 0 4px rgba(59, 91, 219, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 91, 219, 0);
+  }
+}
+
+/* The .source.flash rule lives in the collapsible section further down. */
+
+/* ---------- collapsible source list ---------- */
+
+.sources-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  cursor: pointer;
+  user-select: none;
+  font-size: 12.5px;
+  /* Mounts only once the answer has finished typing (sources are attached then),
+     so this plays exactly when the bar is supposed to appear. */
+  animation: source-in 0.4s ease both;
+}
+
+.sources-toggle:hover {
+  border-color: var(--accent);
+}
+
+.sources-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sources-count {
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.sources-files {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+
+/* Points right when closed, down when open. */
+.chev {
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+  border-right: 1.5px solid var(--text-dim);
+  border-bottom: 1.5px solid var(--text-dim);
+  transform: rotate(-45deg);
+  transition: transform 0.25s ease;
+}
+
+.sources-toggle[aria-expanded="true"] .chev {
+  transform: rotate(45deg);
+}
+
+/*
+ * Height via grid-template-rows 0fr <-> 1fr: the row tracks its content, so
+ * there is no max-height to guess and overshoot on a short list. Browsers that
+ * cannot interpolate the value still snap between the two states, so the toggle
+ * never strands the cards hidden.
+ */
+.sources-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.sources-wrap.open {
+  grid-template-rows: 1fr;
+}
+
+/*
+ * Cards animate on expand rather than on mount: the animation only matches
+ * while the list is open, so adding .open is what plays it, and collapsing then
+ * re-expanding plays it again.
+ */
+.sources-wrap.open .source {
+  animation: source-in 0.4s ease both;
+}
+
+/*
+ * Both rules use the `animation` shorthand, so only one can win. This is
+ * (0,4,0) against the entrance rule's (0,3,0) — strictly higher, not merely
+ * later in the file — so the citation flash survives regardless of ordering,
+ * and a card being clicked while it is still fading in flashes instead of
+ * silently keeping the entrance animation.
+ */
+.sources-wrap.open .source.flash {
+  animation: cite-flash 1.6s ease-out;
+  background: var(--accent-soft);
+}
